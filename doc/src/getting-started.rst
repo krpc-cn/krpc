@@ -1,84 +1,74 @@
 .. _getting-started:
 
-Getting Started
+入门指南
 ===============
 
-This short guide explains the basics for getting the kRPC server set up and running, and writing a
-basic Python script to interact with the game.
+这个简单的指南解释了设置和运行 kRPC 服务端的基本知识, 再写一个基本的 Python 脚本与游戏互动。
 
-The Server Plugin
+服务端插件
 -----------------
 
-Installation
+安装
 ^^^^^^^^^^^^
 
-1. Download and install the kRPC server plugin from one of these locations:
+1. 从下面下载并安装kRPC服务端插件:
 
  * :github-download-zip:`Github <krpc>`
  * `SpaceDock <https://spacedock.info/mod/69/kRPC>`_
  * `Curse <https://mods.curse.com/ksp-mods/kerbal/220219-krpc-control-the-game-using-c-c-java-lua-python>`_
- * Or the install it using `CKAN <https://forum.kerbalspaceprogram.com/index.php?/topic/90246-the-comprehensive-kerbal-archive-network-ckan-package-manager-v1180-19-june-2016/>`_
+ * 或者使用 `CKAN <https://forum.kerbalspaceprogram.com/index.php?/topic/90246-the-comprehensive-kerbal-archive-network-ckan-package-manager-v1180-19-june-2016/>`_
 
-2. Start up KSP and load a save game.
+2. 启动 KSP 并加载一个存档。
 
-3. You should be greeted by the server window:
+3. 服务端窗口应该和你打招呼了:
 
    .. image:: /images/getting-started/server-window.png
 
-4. Click "Start server" to, erm... start the server! If all goes well, the light should turn a happy
-   green color.
+4. 单机 "Start server" 来, 额... 启动服务端! 如果一切顺利, 灯应该变成快乐的绿色。
 
-5. You can hide the window by clicking the close button in the top right. The window can also be
-   shown/hidden by clicking on the icon in the top right:
+5. 你可以单机右上角的关闭按钮隐藏窗口，也能单机右上角的图标 显示/隐藏 窗口:
 
    .. image:: /images/getting-started/applauncher.png
 
-   This icon will also turn green when the server is online.
+   服务端联机时这个图标也会变成绿色。
 
-Configuration
+配置
 ^^^^^^^^^^^^^
 
-The server is configured by clicking edit on the window displayed in-game:
+点击窗口上的 "Edit" 按钮配置服务端:
 
-1. **Protocol**: this is the protocol used by the server. This affects type of client can connect to
-   the server. For Python, and most other clients that communicate over TCP/IP you want to select
-   "Protobuf over TCP".
-2. **Address**: this is the IP address that the server will listen on. To only allow connections
-   from the local machine, select 'localhost' (the default). To allow connections over a network,
-   either select the local IP address of your machine, or choose 'Manual' and enter the local IP
-   address manually.
-3. **RPC and Stream port numbers**: These need to be set to port numbers that are available on your
-   machine. In most cases, they can just be left as the default.
+1. **Protocol**: 这是服务端使用的协议，它影响到可以链接服务端的客户端类型。 
+   Python 和大多数客户端通过 TCP/IP 协议链接，这里你需要选择 "Protobuf over TCP"。
+2. **Address**: 这是服务端要监听的 IP 地址，只允许本地连接就选 'localhost' (the default)。 
+   要允许网络连接就选择你电脑的本地 IP 地址，或者选择 'Manual' 手动输入 IP 地址。
+3. **RPC and Stream port numbers**: 这里设置为你电脑上可用的端口号，一般保持默认就可以了。
 
-There are also several advanced settings, which are hidden by default, but can be revealed by
-checking "Show advanced settings":
+还有些高级设置默认是隐藏的， 可以选中 "Show advanced settings" 查看:
 
-1. **Auto-start server**: When enabled, the server will start automatically when the game loads.
-2. **Auto-accept new clients**: When enabled, new client connections are automatically allowed. When
-   disabled, a pop-up is displayed asking whether the new client connection should be allowed.
+1. **Auto-start server**: 开启此项会使服务端在游戏载入完毕后自动运行。
+2. **Auto-accept new clients**: 开启此项会自动允许新的客户端连接。禁用此项会在新的客户端连接时弹出窗口询问是否允许。
 
-The other advanced settings control the :ref:`performance of the server
-<server-performance-settings>`.
+其它高级设置是控制 :ref:`服务器性能 <server-performance-settings>`.
 
-The Python Client
+Python 客户端
 -----------------
 
-.. note:: kRPC supports both Python 2.7 and Python 3.x.
+.. note:: kRPC 同时支持 Python 2.7 和 Python 3.x.
 
-On Windows
+Windows系统
 ^^^^^^^^^^
 
-1. If you don't already have python installed, download the python installer and run it:
-   https://www.python.org/downloads/windows When running the installer, make sure that pip is
-   installed as well.
+1. 如果你还没装python,下载python安装程序并运行:
+   https://www.python.org/downloads/windows 
+   安装时要确保pip也要一起安装。
 
-2. Install the kRPC python module, by opening command prompt and running the following command:
-   ``C:\Python27\Scripts\pip.exe install krpc`` You might need to replace ``C:\Python27`` with the
-   location of your python installation.
+2. 打开命令提示符运行以下命令安装kRPC python模块:
+   ``C:\Python27\Scripts\pip.exe install krpc`` 
+   你或许要把``C:\Python27``替换成你的python安装目录。
 
-3. Run Python IDLE (or your favorite editor) and start coding!
+3. 运行Python IDLE (或者你最爱的编辑器)开始编程吧！
 
-On Linux
+Linux系统（用linux系统的人应该不需要我翻译吧-译者注）
 ^^^^^^^^
 
 1. Your linux distribution likely already comes with python installed. If not, install python using
@@ -92,10 +82,10 @@ On Linux
 
 4. Start coding!
 
-'Hello World' Script
+'Hello World'脚本
 --------------------
 
-Run KSP and start the server with the default settings. Then run the following python script.
+打开KSP并用默认设置启动服务端，然后运行以下python脚本。
 
 
 .. code-block:: python
@@ -106,20 +96,17 @@ Run KSP and start the server with the default settings. Then run the following p
    vessel = conn.space_center.active_vessel
    print(vessel.name)
 
-This does the following: line 1 loads the kRPC python module, line 2 opens a new connection to the
-server, line 3 gets the active vessel and line 4 prints out the name of the vessel. You should see
-something like the following:
+按照下面做: 第一行加载kRPC python模块,第二行打开与服务器的新连接,第三行获取活动飞船，第四行输出飞船的名字。
+然后你看到的应该是下面这样:
 
 .. image:: /images/getting-started/hello-world.png
 
-Congratulations! You've written your first script that communicates with KSP.
+恭喜! 你刚刚写了第一个与KSP通信的脚本。
 
-Going further...
+更进一步...
 ----------------
 
- * For some more interesting examples of what you can do with kRPC, check out the
-   :doc:`tutorials <tutorials>`.
- * Client libraries are available for other languages too, including :doc:`C# <csharp>`,
-   :doc:`C++ <cpp>`, :doc:`Java <java>` and :doc:`Lua <lua>`.
- * It is also possible to :doc:`communicate with the server manually <communication-protocols>` from
-   any language you like.
+ * 更多你可以通过kRPC做的有趣示例,请点击 :doc:`教程 <tutorials>`.
+ * 客户端库也可用于其它语言，包括 :doc:`C# <csharp>`,
+   :doc:`C++ <cpp>`, :doc:`Java <java>` 和 :doc:`Lua <lua>`.
+ * 您也可以用任何喜欢的语言 :doc:`手动与服务器通信 <communication-protocols>`。
