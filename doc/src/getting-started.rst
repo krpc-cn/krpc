@@ -24,7 +24,7 @@
 
    .. image:: /images/getting-started/server-window.png
 
-4. 单机 "Start server" 来, 额... 启动服务端! 如果一切顺利, 灯应该变成快乐的绿色。
+4. 单机 "Start server" 来, 额... 启动服务端! 如果一切顺利, 灯应该变成欢快的绿色。
 
 5. 你可以单机右上角的关闭按钮隐藏窗口，也能单机右上角的图标 显示/隐藏 窗口:
 
@@ -39,7 +39,7 @@
 
 1. **Protocol**: 这是服务端使用的协议，它影响到可以链接服务端的客户端类型。 
    Python 和大多数客户端通过 TCP/IP 协议链接，这里你需要选择 "Protobuf over TCP"。
-2. **Address**: 这是服务端要监听的 IP 地址，只允许本地连接就选 'localhost' (the default)。 
+2. **Address**: 这是服务端要监听的 IP 地址，只允许本地连接就选 'localhost' (默认)。 
    要允许网络连接就选择你电脑的本地 IP 地址，或者选择 'Manual' 手动输入 IP 地址。
 3. **RPC and Stream port numbers**: 这里设置为你电脑上可用的端口号，一般保持默认就可以了。
 
@@ -60,7 +60,7 @@ Windows系统
 
 1. 如果你还没装python,下载python安装程序并运行:
    https://www.python.org/downloads/windows 
-   安装时要确保pip也要一起安装。
+   安装时要确保勾选pip一起安装。
 
 2. 打开命令提示符运行以下命令安装kRPC python模块:
    ``C:\Python27\Scripts\pip.exe install krpc`` 
