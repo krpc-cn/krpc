@@ -1,32 +1,28 @@
-kRPC Documentation
+kRPC文档
 ==================
 
-kRPC allows you to control Kerbal Space Program from scripts running outside of
-the game.
-It comes with client libraries for many popular languages including
+kRPC允许你从游戏外部运行脚本控制Kerbal Space Program。
+它有许多流行语言的客户端库
 :doc:`C# <csharp/client>`,
 :doc:`C++ <cpp/client>`,
 :doc:`Java <java/client>`,
-:doc:`Lua <lua/client>` and
+:doc:`Lua <lua/client>` 和
 :doc:`Python <python/client>`.
-Clients, made by others, are also available for
-`Ruby <https://github.com/TeWu/krpc-rb>`_ and
+他人制作的客户端同样支持
+`Ruby <https://github.com/TeWu/krpc-rb>`_ 和
 `Haskell <https://github.com/Cahu/krpc-hs>`_.
 
- * :doc:`Getting Started Guide <getting-started>`
- * :doc:`Tutorials and Examples <tutorials>`
- * :doc:`Clients, services and tools made by others <third-party>`
+ * :doc:`入门指南 <getting-started>`
+ * :doc:`教程和示例 <tutorials>`
+ * :doc:`他人制作的客户端、服务端和工具 <third-party>`
 
-The mod exposes most of KSPs API for controlling and interacting with rockets,
-and also includes support several popular mods including Ferram Aerospace
-Research, Kerbal Alarm Clock and Infernal Robotics.
+这个MOD开放了许多与控制和与火箭交互的KSP API,
+也包括支持几个流行的MOD，有Ferram Aerospace
+Research, Kerbal Alarm Clock 和 Infernal Robotics.
 
-This functionality is provided to client programs via a server running in the
-game. Client scripts connect to this server and use it to execute 'remote
-procedures'. This communication can be done on local machine only, over a local
-network, or even over the wider internet if configured correctly. The server is
-extensible - additional remote procedures (grouped into "services") can be added
-to the server using the :doc:`Service API <extending>`.
+这个功能是客户端通过运行在游戏中的服务端实现的。 客户端连接到服务端并用它执行'remote
+procedures'。 这个通信只能在本地计算机网络上完成, 配置正确的话还可以运行在局域网或者广域网上。 
+服务端是可扩展的 - 额外的远程程序 (分组到"services") 可以用 :doc:`Service API <extending>` 添加到服务端。
 
 .. toctree::
    :hidden:
