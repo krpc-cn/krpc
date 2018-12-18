@@ -1,25 +1,24 @@
 .. currentmodule:: SpaceCenter
 
-Sub-Orbital Flight
+亚轨道飞行
 ==================
 
-This introductory tutorial uses kRPC to send some Kerbals on a sub-orbital flight, and (hopefully)
-returns them safely back to Kerbin. It covers the following topics:
+这个入门教程教你用kRPC送几个Kerbals(坎星人)到亚轨道, 并(但愿)将它们安全的返回Kerbin。
+这涵盖以下几个主题:
 
-* Controlling a rocket (activating stages, setting the throttle)
-* Using the auto pilot to point the vessel in a specific direction
-* Using events to wait for things to happen in game
-* Tracking the amount of resources in the vessel
-* Tracking flight and orbital data (such as altitude and apoapsis altitude)
+* 控制一个火箭 (激活阶段, 设置油门)
+* 使用自动驾驶将飞船指向指定方向
+* 用游戏中发生的事触发事件
+* 跟踪飞船上的资源值
+* 跟踪飞行和轨道数据 (例如海拔和远拱点)
 
-.. note:: For details on how to write scripts and connect to kRPC, see the :ref:`getting-started`
-          guide.
+.. note:: 如何编写脚本和连接kRPC的详细资料请参阅 :ref:`getting-started`。
 
-This tutorial uses the two stage rocket pictured below. The craft file for this rocket can be
-:download:`downloaded here </crafts/SubOrbitalFlight.craft>`.
+这个教程使用下图的二级火箭。飞船文件可以
+:download:`在这下载 </crafts/SubOrbitalFlight.craft>`.
 
-This tutorial includes source code examples for the main client languages that kRPC supports. The
-entire program, for your chosen language can be downloaded from here:
+此教程包含kRPC支持的主要客户端语言的源码示例。
+从此选择下载语言的完整程序:
 
 :download:`C#</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs>`,
 :download:`C++</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp>`,
@@ -30,11 +29,10 @@ entire program, for your chosen language can be downloaded from here:
 .. image:: /images/tutorials/SubOrbitalFlight.png
    :align: center
 
-Part One: Preparing for Launch
+第一步: 准备发射
 ------------------------------
 
-The first thing we need to do is open a connection to the server. We can also pass a descriptive
-name for our script that will appear in the server window in game:
+我们要做的第一步是打开与服务器的连接。 我们还可以为脚本传递一个描述性名字， 它会显示在游戏内的服务端窗口:
 
 .. tabs::
 
@@ -77,8 +75,7 @@ name for our script that will appear in the server window in game:
          :lineno-start: 3
          :linenos:
 
-Next we need to get an object representing the active vessel. It's via this object that we will send
-instructions to the rocket:
+下面我们需要获取一个代表活动飞船的对象。 我们将通过这个对象向火箭发送指令:
 
 .. tabs::
 
@@ -122,9 +119,8 @@ instructions to the rocket:
          :lineno-start: 5
          :linenos:
 
-We then need to prepare the rocket for launch. The following code sets the throttle to maximum and
-instructs the auto-pilot to hold a pitch and heading of 90° (vertically upwards). It then waits for
-1 second for these settings to take effect.
+现在准备火箭的发射。下面的代码把油门设置为最大，并指示自动驾驶仪保持俯仰角和偏航角在90° (垂直向上)。
+然后等待1秒设置生效。
 
 .. tabs::
 
@@ -168,10 +164,10 @@ instructs the auto-pilot to hold a pitch and heading of 90° (vertically upwards
          :lineno-start: 7
          :linenos:
 
-Part Two: Lift-off!
+第二步: 升空!
 -------------------
 
-We're now ready to launch by activating the first stage (equivalent to pressing the space bar):
+现在激活第一阶段发射 (相当于按空格键):
 
 .. tabs::
 
@@ -215,10 +211,8 @@ We're now ready to launch by activating the first stage (equivalent to pressing 
          :lineno-start: 12
          :linenos:
 
-The rocket has a solid fuel stage that will quickly run out, and will need to be jettisoned. We can
-monitor the amount of solid fuel in the rocket using an event that is triggered when there is very
-little solid fuel left in the rocket. When the event is triggered, we can activate the next stage to
-jettison the boosters:
+火箭有一个会快速燃尽的固体燃料阶段需要抛弃。 我们可以用事件监视火箭中固体燃料的值，
+它会在火箭中固体燃料很少的时候触发，当事件触发时激活下一阶段抛弃固体助推器:
 
 .. tabs::
 
@@ -262,16 +256,14 @@ jettison the boosters:
          :lineno-start: 15
          :linenos:
 
-In this bit of code, ``vessel.resources`` returns a :class:`Resources` object that is used to get
-information about the resources in the rocket. The code creates the expression
-``vessel.resources.amount('SolidFuel') < 0.1`` on the server, using the expression API. This
-expression is then used to drive an event, which is triggered when the expression returns true.
+这段代码中, ``vessel.resources`` 返回一个 :class:`Resources` 对象用来获取有关飞船资源的信息。
+代码在服务端创建表达式``vessel.resources.amount('SolidFuel') < 0.1``，此处使用表达式API。
+这个表达式用来在返回值为true时驱动抛弃助推器事件。
 
-Part Three: Reaching Apoapsis
+第三步: 达到远拱点
 -----------------------------
 
-Next we will execute a gravity turn when the rocket reaches a sufficiently high altitude. The
-following uses an event to wait until the altitude of the rocket reaches 10km:
+接下来我们会在飞船达到足够海拔时进行重力转向。下面使用一个事件等待飞船达到海拔10km:
 
 .. tabs::
 
@@ -315,12 +307,11 @@ following uses an event to wait until the altitude of the rocket reaches 10km:
          :lineno-start: 25
          :linenos:
 
-In this bit of code, calling ``vessel.flight()`` returns a :class:`Flight` object that is used to
-get all sorts of information about the rocket, such as the direction it is pointing in and its
-velocity.
+这段代码中, 调用``vessel.flight()``返回一个:class:`Flight`对象来获取火箭的所有类型的信息，
+例如它的方向和速度。
 
-Now we need to angle the rocket over to a pitch of 60° and maintain a heading of 90° (west). To do
-this, we simply reconfigure the auto-pilot:
+现在我们要把火箭的俯仰角调到60°，维持偏航角90° (西)。
+只需要重新配置自动驾驶仪:
 
 .. tabs::
 
@@ -364,8 +355,8 @@ this, we simply reconfigure the auto-pilot:
          :lineno-start: 33
          :linenos:
 
-Now we wait until the apoapsis reaches 100km (again, using an event), then reduce the throttle to
-zero, jettison the launch stage and turn off the auto-pilot:
+现在一直等到远拱点为100km(再次使用事件),降低油门到0,
+抛弃发射阶段并关闭自动驾驶仪:
 
 .. tabs::
 
@@ -409,16 +400,14 @@ zero, jettison the launch stage and turn off the auto-pilot:
          :lineno-start: 36
          :linenos:
 
-In this bit of code, ``vessel.orbit`` returns an :class:`Orbit` object that contains all the
-information about the orbit of the rocket.
+这段代码中, ``vessel.orbit``返回一个:class:`Orbit`包含火箭轨道的所有信息的对象。
 
-Part Four: Returning Safely to Kerbin
+第四步: 安全地返回Kerbin
 -------------------------------------
 
-Our Kerbals are now heading on a sub-orbital trajectory and are on a collision course with the
-surface. All that remains to do is wait until they fall to 1km altitude above the surface, and then
-deploy the parachutes. If you like, you can use time acceleration to skip ahead to just before this
-happens - the script will continue to work.
+我们的Kerbals现在正朝着一个会与地面碰撞的亚轨道抛物线上航行着。
+剩下要做的就是等它们与地面高度到了1km展开降落伞。
+如果你想，可以使用时间加速跳过中间过程 - 脚本仍会运行。
 
 .. tabs::
 
@@ -462,8 +451,7 @@ happens - the script will continue to work.
          :lineno-start: 50
          :linenos:
 
-The parachutes should have now been deployed. The next bit of code will repeatedly print out the
-altitude of the capsule until its speed reaches zero -- which will happen when it lands:
+现在降落伞应该展开了，下端代码会重复输出返回舱的地面高度一直到它的速度为0--这会发生在着陆时:
 
 .. tabs::
 
@@ -507,11 +495,10 @@ altitude of the capsule until its speed reaches zero -- which will happen when i
          :lineno-start: 60
          :linenos:
 
-This bit of code uses the ``vessel.flight()`` function, as before, but this time it is passed a
-:class:`ReferenceFrame` parameter. We want to get the vertical speed of the capsule relative to the
-surface of Kerbin, so the values returned by the flight object need to be relative to the surface of
-Kerbin. We therefore pass ``vessel.orbit.body.reference_frame`` to ``vessel.flight()`` as this
-reference frame has its origin at the center of Kerbin and it rotates with the planet. For more
-information, check out the tutorial on :ref:`tutorial-reference-frames`.
+这段代码使用``vessel.flight()``函数,如前所述,但这次传递了一个
+:class:`ReferenceFrame`参数。我们想要获得返回舱相对于Kerbin星球地面的垂直速度，所以要飞行对象相对于Kerbin地面的值。
+我们传递``vessel.orbit.body.reference_frame``给``vessel.flight()``，因为这个
+参考框架的起点在Kerbin的中心并且和星球一起旋转。
+有关更多信息，请查看:ref:`tutorial-reference-frames`.
 
-Your Kerbals should now have safely landed back on the surface.
+你的Kerbals现在应该安全地降落到地面了吧。
