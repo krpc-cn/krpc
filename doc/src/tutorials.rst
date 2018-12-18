@@ -1,8 +1,7 @@
-Tutorials and Examples
+教程和示例
 ======================
 
-This collection of tutorials and example scripts explain how to use the features
-of kRPC.
+这个教程和脚本示例集合讲解如何使用kRPC的功能。
 
 .. toctree::
    :maxdepth: 1
@@ -15,3 +14,12 @@ of kRPC.
    tutorials/docking-guidance
    tutorials/user-interface
    tutorials/autopilot
+
+亚轨道飞行
+参考框架
+发射到轨道
+俯仰-方向-旋转
+零件
+对接制导
+用户界面
+自动驾驶
