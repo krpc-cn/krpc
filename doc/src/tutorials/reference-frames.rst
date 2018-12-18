@@ -6,64 +6,59 @@
 
 .. _tutorial-reference-frames:
 
-Reference Frames
+参考框架
 ================
 
 .. contents::
    :local:
 
-Introduction
+简介
 ------------
 
-All of the positions, directions, velocities and rotations in kRPC are relative
-to something, and *reference frames* define what that something is.
+在kRPC中所有的位置, 方向, 速度和旋转都与某物有关。
+*参考框架*则定义了什么是某物。
 
-A reference frame specifies:
+参开框架指定:
 
-* The position of the origin at (0,0,0)
-* the direction of the coordinate axes x, y, and z
-* the linear velocity of the origin (if the reference frame moves)
-* The angular velocity of the coordinate axes (the speed and direction of rotation of the axes)
+* 原点位置为(0,0,0)
+* 坐标轴 x, y, z的方向
+* 原点的线速度(如果参考框架移动)
+* 坐标轴的角速度(轴的旋转速度和方向)
 
-.. note:: KSP and kRPC use a left handed coordinate system
+.. note:: KSP和kRPC使用左手坐标系
 
-Origin Position and Axis Orientation
+原点位置和轴方向
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following gives some examples of the position of the origin and the
-orientation of the coordinate axes for various reference frames.
+下面给出了一些各种参考框架的原点位置和坐标轴方向的示例。
 
-Celestial Body Reference Frame
+天体参考框架
 """"""""""""""""""""""""""""""
 
 .. figure:: /images/reference-frames/celestial-body.png
    :align: right
    :figwidth: 250
 
-   The reference frame for a celestial body, such as Kerbin. The equator is
-   shown in blue, and the prime meridian in red. The black arrows show the
-   coordinate axes, and the origin is at the center of the planet.
+   比如Kerbin的天体参考框架。赤道用蓝色表示，本初子午线用红色。
+   黑色箭头代表坐标轴,原点位于行星的中心。
 
-The reference frame obtained by calling :attr:`CelestialBody.reference_frame`
-for Kerbin has the following properties:
+此参考框架通过调用:attr:`CelestialBody.reference_frame`获得Kerbin的以下属性:
 
-* The origin is at the center of Kerbin,
+* 原点位于Kerbin的中心,
 
-* the y-axis points from the center of Kerbin to the north pole,
+* y轴是从Kerbin的中心点指向北极,
 
-* the x-axis points from the center of Kerbin to the intersection of the prime
-  meridian and equator (the surface position at 0° longitude, 0° latitude),
+* x轴是从Kerbin的中心点指向赤道与本初子午线的交点(地面位置为经度0°, 纬度0°),
 
-* the z-axis points from the center of Kerbin to the equator at 90°E longitude,
+* z轴是从Kerbin的中心点指向赤道的经度90°E(东经),
 
-* and the axes rotate with the planet, i.e. the reference frame has the same
-  rotational/angular velocity as Kerbin.
+* 轴与行星一起旋转，即参考框架与Kerbin有同样的
+  旋转/角速度。
 
-This means that the reference frame is *fixed* relative to Kerbin -- it moves
-with the center of the planet, and also rotates with the planet. Therefore,
-positions in this reference frame are relative to the center of the planet. The
-following code prints out the position of the active vessel in Kerbin's
-reference frame:
+这意味着参考框架相对于Kerbin是*固定的*--
+它与行星的中心一起移动, 也与行星一起旋转。 因此,
+这个参考框架内的位置参照于行星中心。
+下面的代码输出活动飞船在Kerbin参考框架中的位置:
 
 .. tabs::
 
@@ -97,12 +92,12 @@ reference frame:
       .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.py
          :language: python
 
-For a vessel sat on the launchpad, the magnitude of this position vector will be
-roughly 600,000 meters (equal to the radius of Kerbin). The position vector will
-also not change over time, because the vessel is sat on the surface of Kerbin
-and the reference frame also rotates with Kerbin.
+对于在发射台上的飞船,位置矢量的大小大约为600,000米
+(等于Kerbin的半径)。 位置矢量也不会
+随着时间变化，因为飞船是在Kerbin的地面上的，
+参考框架还是会随着Kerbin旋转。
 
-Vessel Orbital Reference Frame
+飞船轨道参考框架
 """"""""""""""""""""""""""""""
 
 .. figure:: /images/reference-frames/vessel-orbital.png
@@ -111,24 +106,23 @@ Vessel Orbital Reference Frame
 
    The orbital reference frame for a vessel.
 
-Another example is the orbital reference frame for a vessel, obtained by calling
-:attr:`Vessel.orbital_reference_frame`. This is fixed to the vessel (the origin
-moves with the vessel) and is orientated so that the axes point in the orbital
-prograde/normal/radial directions.
+另一个是飞船的轨道参考框架， 通过调用
+:attr:`Vessel.orbital_reference_frame`获得。 它固定在飞船上(原点随着飞船移动) 
+并且定向， 以便轴点在轨道的
+轴向/法线/径向方向.
 
-* The origin is at the center of mass of the vessel,
+* 原点在飞船的质量中心,
 
-* the y-axis points in the prograde direction of the vessels orbit,
+* y轴指向飞船轨道方向,
 
-* the x-axis points in the anti-radial direction of the vessels orbit,
+* x轴指向飞船轨道的反径向方向，
 
-* the z-axis points in the normal direction of the vessels orbit,
+* z轴指向飞船轨道的法线方向，
 
-* and the axes rotate to match any changes to the prograde/normal/radial directions,
-  for example when the prograde direction changes as the vessel continues on its
-  orbit.
+* 并且3轴会旋转以匹配轴向/法线/径向方向的变化,
+  例如飞船在轨道上时它的轴向会一直变化。
 
-Vessel Surface Reference Frame
+飞船表面参考框架
 """"""""""""""""""""""""""""""
 
 .. figure:: /images/reference-frames/vessel-aircraft.png
@@ -137,40 +131,36 @@ Vessel Surface Reference Frame
 
    The reference frame for an aircraft.
 
-Another example is :attr:`Vessel.reference_frame`. As with the previous example,
-it is fixed to the vessel (the origin moves with the vessel), however the
-orientation of the coordinate axes is different. They track the orientation of
-the vessel:
+另一个示例是:attr:`Vessel.reference_frame`. 与之前的示例一样,
+它固定在飞船上(原点随着飞船移动),
+但是坐标轴的方向不同。它们跟踪飞船的方向:
 
-* The origin is at the center of mass of the vessel,
+* 原点在飞船的质量中心,
 
-* the y-axis points in the same direction that the vessel is pointing,
+* the y轴指向飞船轴向,
 
-* the x-axis points out of the right side of the vessel,
+* the x轴指向飞船右侧,
 
-* the z-axis points downwards out of the bottom of the vessel,
+* the z轴指向飞船下方,
 
-* and the axes rotate with any changes to the direction of the vessel.
+* 并且轴随着飞船的变化旋转。
 
-Linear Velocity and Angular Velocity
+线速度和角速度
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Reference frames move and rotate relative to one another. For example, the
-reference frames discussed previously all have their origin position fixed to
-some object (such as a vessel or a planet). This means that they move and rotate
-to track the object, and so have a linear and angular velocity associated with
-them.
+参考框架相对于另一个移动和旋转。例如,
+参考框架前面讨论的都是原点和位置固定在某个对象上
+(比如飞船或行星)。这意味着它们移动和旋转来跟踪对象，
+所以具有与它们相同的线速度和角速度。
 
-For example, the reference frame obtained by calling
-:attr:`CelestialBody.reference_frame` for Kerbin is fixed relative to
-Kerbin. This means the angular velocity of the reference frame is identical to
-Kerbin's angular velocity, and the linear velocity of the reference frame
-matches the current orbital velocity of Kerbin.
+例如, 参考框架通过调用Kerbin的
+:attr:`CelestialBody.reference_frame` 获得相对于Kerbin固定的数据。
+这意味着参考框架的角速度与Kerbin的角速度是完全相同的，线速度与Kerbin现在的轨道速度相同.
 
-Available Reference Frames
+可用的参考框架
 --------------------------
 
-kRPC provides the following reference frames:
+kRPC提供以下参考框架:
 
 .. tabs::
 
@@ -270,43 +260,43 @@ kRPC provides the following reference frames:
       * :py:attr:`DockingPort.reference_frame`
       * :py:attr:`Thruster.thrust_reference_frame`
 
-Relative and hybrid reference frames can also be constructed from the above.
+相对和混合参考框架都可以用上面的构造。
 
-Custom Reference Frames
+自定义参考框架
 -----------------------
 
-Custom reference frames can be constructed from the built in frames listed
+自定义参考框架 can be constructed from the built in frames listed
 above. They come in two varieties: 'relative' and 'hybrid'.
 
 A relative reference frame is constructed from a parent reference frame, a fixed
 position offset and a fixed rotation offset. For example, this could be used to
 construct a reference frame whose origin is 10m below the vessel as follows, by
 applying a position offset of 10 along the z-axis to
-:attr:`Vessel.reference_frame`. Relative reference frames can be constructed by
+:attr:`Vessel.reference_frame`. Relative 参考框架 can be constructed by
 calling :meth:`ReferenceFrame.create_relative`.
 
 A hybrid reference frame inherits its components (position, rotation, velocity
-and angular velocity) from the components of other reference frames. Note that
+and angular velocity) from the components of other 参考框架. Note that
 these components need not be fixed. For example, you could construct a reference
 frame whose position is the center of mass of the vessel (inherited from
 :attr:`Vessel.reference_frame`) and whose rotation is that of the planet being
 orbited (inherited from :attr:`CelestialBody.reference_frame`). Relative
-reference frames can be constructed by calling
+参考框架 can be constructed by calling
 :meth:`ReferenceFrame.create_hybrid`.
 
 The parent reference frame(s) of a custom reference frame can also be other
-custom reference frames. For example, you could combine the two example frames
+custom 参考框架. For example, you could combine the two example frames
 from above: construct a hybrid reference frame, centered on the vessel and
 rotated with the planet being orbited, and then create a relative reference that
 offsets the position of this 10m along the z-axis. The resulting frame will have
 its origin 10m below the vessel, and will be rotated with the planet being
 orbited.
 
-Converting Between Reference Frames
+Converting Between 参考框架
 -----------------------------------
 
-kRPC provides utility methods to convert positions, directions, rotations and
-velocities between the different reference frames:
+kRPC provides utility methods to convert 位置, 方向,旋转 and
+速度 between the different 参考框架:
 
 
 .. tabs::
@@ -403,12 +393,12 @@ is orbiting:
 Examples
 --------
 
-The following examples demonstrate various uses of reference frames.
+The following examples demonstrate various uses of 参考框架.
 
-Navball directions
+Navball 方向
 ^^^^^^^^^^^^^^^^^^
 
-This example demonstrates how to make the vessel point in various directions on
+This example demonstrates how to make the vessel point in various 方向 on
 the navball:
 
 .. tabs::
@@ -461,11 +451,11 @@ Finally, the code instructs the auto-pilot to point in direction ``(0,0,-1)``
 (along the negative z axis). The z-axis of the reference frame points east, so
 the requested direction points west -- as required.
 
-Orbital directions
+Orbital 方向
 ^^^^^^^^^^^^^^^^^^
 
 This example demonstrates how to make the vessel point in the various orbital
-directions, as seen on the navball when it is in 'orbit' mode. It uses
+方向, as seen on the navball when it is in 'orbit' mode. It uses
 :attr:`Vessel.orbital_reference_frame`.
 
 .. tabs::
