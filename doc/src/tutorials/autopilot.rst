@@ -1,100 +1,90 @@
-AutoPilot
+自动驾驶
 =========
 
-kRPC provides an autopilot that can be used to hold a vessel in a chosen
-orientation. It automatically tunes itself to cope with vessels of differing
-size and control authority. This tutorial explains how the autopilot works, how
-to configure it and mathematics behind it.
+kRPC提供了用于将飞船固定指定方向的自动驾驶功能。
+它会自动调整以适应不同大小和权限的飞船。
+本教程演示了自动驾驶如何工作，
+如何配置和其背后的数学原理。
 
-Overview
+概述
 --------
 
-The inputs to the autopilot are:
+自动驾驶需要输入的是:
 
 * A reference frame defining where zero rotation is,
-* target pitch and heading angles,
-* and an (optional) target roll angle.
+* 目标俯仰角和偏航角,
+* 和(可选的)目标翻滚角。
 
-When a roll angle is not specified, the autopilot will try to zero out any
-rotation around the roll axis but will not try to hold a specific roll
-angle.
+如果翻滚角没有指定,自动驾驶会尝试将围绕翻滚角的任何旋转归零，
+但是不会尝试保持固定的翻滚角。
 
-The diagram below shows a high level overview of the autopilot. First, the
-current rotation and target rotation are used to compute the :rst:ref:`target
-angular velocity <target-angular-velocity>` that is needed to rotate the vessel
-to face the target. Next, the components of this angular velocity in the pitch,
-yaw and roll axes of the vessel are passed to three PID controllers. The outputs
-of these controllers are used as the control inputs for the vessel.
+下图显示了自动驾驶的高级概述。首先,
+当前旋转和目标旋转用于计算需要旋转面向目标的
+:rst:ref:`目标角速度<target-angular-velocity>`。
+接下来,将飞船的俯仰，偏航和滚动轴的角速度分量
+传递给3个PID控制器。
+控制器的输出用作飞船的控制输入。
 
-There are several parameters affecting the operation of the autopilot, shown the
-the left of the diagram. They are covered in the next section.
+图示左边有几个参数影响自动驾驶的操作,
+下一节介绍它们。
 
 .. image:: /images/tutorials/autopilot-schematic.png
    :align: center
 
-Configuring the AutoPilot
+配置自动驾驶
 -------------------------
 
-There are several parameters that affect the behavior of the autopilot. The
-default values for these should suffice in most cases, but they can be adjusted
-to fit your needs.
+有几个参数会影响自动驾驶仪的行为，
+在大多数情况下，这些的默认值应该足够了，但可以根据您的需要进行调整。
 
-* The **stopping time** is the maximum amount of time that the vessel should
-  need to come to a complete stop. This limits the maximum angular velocity of
-  the vessel. It is a vector of three stopping times, one for each of the pitch,
-  roll and yaw axes. The default value is 0.5 seconds for each axis.
+* **stopping time** 是飞船需要完全停止的最久时间。
+  这限制了飞船的最大角速度。
+  它是3个停止时间的矢量,俯仰轴，偏航轴，滚转轴各一个。
+  每个轴的默认值是0.5秒。
 
-* The **deceleration time** is the minimum time the autopilot should take to
-  decelerate the vessel to a stop, as it approaches the target direction. This
-  is a minimum value, as the time required may be higher if the vessel does not
-  have sufficient angular acceleration. It is a vector of three deceleration
-  times, in seconds, for each of the pitch, roll and yaw axes. The default value
-  is 5 seconds for each axis. A smaller value will make the autopilot decelerate
-  more aggressively, turning the vessel towards the target more
-  quickly. However, decreasing the value too much could result in overshoot.
+* **deceleration time** 是当飞船接近目标方向时需要减速的最短时间，
+  这是最小值,因为如果飞船没有足够的角加速度，需要的时间会更多。
+  它是俯仰轴，偏航轴和滚动轴三个减速时间的矢量，以秒为单位，
+  默认值是每个轴5秒。一个小的值会使自动减速更加积极,
+  飞船也能更快地朝向目标。
+  但是,这个值调地太小会导致超调。（飞船在目标方向周围来回摆动）
 
-* In order to avoid overshoot, the stopping time should be smaller than the
-  deceleration time. This gives the autopilot some 'spare' acceleration, to
-  adjust for errors in the vessels rotation, for example due to changing
-  aerodynamic forces.
+* 为了避免超调,停止时间应该比减速时间要小。
+  这给自动驾驶一点用于调整飞船滚动中的误差的"备用"加速度,
+  比如空气动力导致的变化。
 
-* The **attenuation angle** sets the region in which the autopilot considers the
-  vessel to be 'close' to the target direction. In this region, the target
-  velocity is attenuated based on how close the vessel is to the target. It is
-  an angle, in degrees, for each of the pitch, roll and yaw axes. The default
-  value is 1 degree in each axis. This attenuation prevents the controls from
-  oscillating when the vessel is pointing in the correct direction. If you find
-  that the vessel still oscillates, try increasing this value.
+* **attenuation angle** 设定自动驾驶认为飞船与目标角度之间"封闭"的范围。
+  在这个范围里,目标速度随着飞船与目标间的接近程度而衰减。 It is
+  它是一个角度,每个俯仰，翻滚和偏航轴，
+  默认值是每个轴1度。
+  当飞船指向正确的方向时，这种衰减阻止了控制器的振荡。
+  如果你发现飞船仍然在振荡，请试着增加这个值。
 
-* The **time to peak**, in seconds, that the PID controllers take to adjust the
-  angular velocity of the vessel to the target angular velocity. Decreasing this
-  value will make the controllers try to match the target velocity more
-  aggressively. It is a vector of three times, one for each of the pitch, roll
-  and yaw axes. The default is 3 seconds in each axis.
+* **time to peak** 单位秒,PID控制器调整飞船的角速度到目标角速度。
+  减小此值会使控制器更积极地匹配目标角速度。
+  它是俯仰，翻滚，偏航轴3个时间的矢量,默认值是每个轴3秒。
 
-* The **overshoot** is the percentage by which the PID controllers are allowed
-  to overshoot the target angular velocity. Increasing this value will make the
-  controllers try to match the target velocity more aggressively, but will cause
-  more overshoot. It is a vector of three values, between 0 and 1, for each of
-  the pitch, roll and yaw axes. The default is 0.01 in each axis.
+* **overshoot** 是PID控制器允许超调目标角速度的百分比。
+  增加这个值将使控制器试图更积极地匹配目标速度，但会导致更多的超调。
+  它是一个3值矢量,0和1之间,每个轴一个。
+  默认值是0.01每轴。
 
 .. _target-angular-velocity:
 
-Computing the Target Angular Velocity
+计算目标角速度
 -------------------------------------
 
-The target angular velocity is the angular velocity needed to the vessel to
-rotate it towards the target direction. It is computed by summing a target
-angular speed for each of pitch, yaw and roll axes. If no roll angle is set,
-then the target angular velocity in the roll axis is simply set to 0.
+目标角速度是飞船使其朝向目标方向旋转所需的角速度。
+它是通过对每个俯仰，偏航和滚动轴的目标角速度求和来计算的。
+如果未设置翻滚角，则翻滚轴中的目标角速度简单地设置为0。
 
-The target angular speed :math:`\omega` in a given axis is computed from the
-angular error :math:`\theta` using the following function:
+给出的轴的目标角速度:math:`\omega`是
+角度差:math:`\theta`用以下函数算得:
 
 .. image:: /images/tutorials/autopilot-angular-speed.png
    :align: center
 
-The equation for this function is:
+这个函数的方程是:
 
 .. math::
    \omega &= -\frac{\theta}{\lvert\theta\rvert}
@@ -107,32 +97,31 @@ The equation for this function is:
    \omega_{max} &= \frac{\tau_{max}t_{stop}}{I} \\
    f_a(\theta) &= \frac{1}{1 + e^{-6/\theta_a(\lvert\theta\rvert - \theta_a)}}
 
-The reasoning and derivation for this is as follows:
+其推理和推导如下:
 
-* The vessel needs to rotate towards :math:`\theta = 0`. This means that the
-  target angular speed :math:`\omega` needs to be positive when :math:`\theta`
-  is negative, and negative when :math:`\theta` is positive. This is done by
-  multiplying by the term :math:`-\frac{\theta}{\lvert\theta\rvert}`, which is 1
-  when :math:`\theta < 0` and -1 when :math:`\theta >= 0`
+* 飞船需要转向:math:`\theta = 0`。这意味着
+  当:math:`\theta`是负数时目标角速度:math:`\omega`必须是正数,
+  :math:`\theta`是正数时为负数。This is done by
+  当:math:`\theta < 0`时是1，:math:`\theta >= 0`时是-1，
+  这是通过乘以项:math:`-\frac{\theta}{\lvert\theta\rvert}`做到的。
 
-* We want the vessel to rotate at a maximum angular speed :math:`\omega_{max}`,
-  which is determined by the stopping time :math:`t_{stop}`. Using the equations
-  of motion under constant acceleration we can derive it as follows:
+* 我们希望飞船以最大角速度:math:`\omega_{max}`旋转,
+  这取决停止时间:math:`t_{stop}`。 
+  使用恒加速运动（motion under constant acceleration）方程我们可以推出如下:
 
   .. math::
      \omega &= \alpha t \\
      \Rightarrow \omega_{max} &= \alpha_{max} t_{stop} \\
                               &= \frac{\tau_{max}t_{stop}}{I}
 
-  where :math:`\tau_{max}` is the maximum torque the vessel can generate, and
-  :math:`I` is its moment of inertia.
+  :math:`\tau_{max}`是飞船可以产生的最大扭矩, 
+  :math:`I`是它的惯性矩（moment of inertia）。
 
-* We want the vessel to take time :math:`t_{decel}` (the deceleration time) to
-  go from moving at speed :math:`\omega_{max}` to rest, when facing the
-  target. And we want it to do this using a constant acceleration
-  :math:`\alpha`. Using the equations of motion under constant acceleration we
-  can derive the target velocity :math:`\omega` in terms of the current angular
-  error :math:`\theta`:
+* 面对目标时我们希望飞船花费时间:math:`t_{decel}`(减速时间)
+  从速度:math:`\omega_{max}`到静止。
+  我们还希望用恒加速度:math:`\alpha`来完成。
+  使用恒加速运动方程我们可以推出当前角度差:math:`\theta`和
+  目标速度:math:`\omega`的关系:
 
   .. math::
      \omega &= \alpha t \\
@@ -143,22 +132,17 @@ The reasoning and derivation for this is as follows:
      \Rightarrow \omega &= \alpha \sqrt{\frac{2 \theta}{\alpha}}
                          = \sqrt{2 \alpha \theta}
 
-* To prevent the vessel from oscillating when it is pointing in the target
-  direction, the gradient of the target angular speed curve at :math:`\theta =
-  0` needs to be 0, and increase/decrease smoothly with increasing/decreasing
-  :math:`\theta`.
+* 为了防止飞船在指向目标方向时震荡，
+  目标角速度曲线:math:`\theta = 0`的梯度(gradient)必须是0,并且随着:math:`\theta`的增大/减小
+  而增大/减小。
 
-  This is not the case for the target angular speed calculated above. To correct
-  this, we multiply by an attenuation function which has the required shape. The
-  following diagram shows the shape of the attenuation function (line in red),
-  the target velocity as calculated previously (line in blue) and the result of
-  multiplying these together (dashed line in black):
+  这与上面计算的目标角速度不同。为了修正这个问题，我们要乘以一个具有所需形状的衰减函数。
+  下图为衰减函数的形状(红色线)、目标速度(蓝色线)以及它们相乘的结果(黑色虚线):
 
   .. image:: /images/tutorials/autopilot-attenuation.png
      :align: center
 
-  The formula for the attenuation function is a logistic function, with the
-  following formula:
+  衰减函数公式是一个逻辑函数，公式如下:
 
   .. math::
      f_a(\theta) &= \frac{1}{1 + e^{-6/\theta_a(\lvert\theta\rvert - \theta_a)}}
@@ -167,19 +151,18 @@ The reasoning and derivation for this is as follows:
   constant acceleration, is only affected by the attenuation function close to
   the attenuation angle. This means that autopilot will use a constant
   acceleration to slow the vessel, until it gets close to the target direction.
+  注意，从恒定加速度下的运动方程导出的原始函数仅受到接近衰减角度的衰减函数的影响。这意味着自动驾驶仪将使用恒定加速度来使船舶减速，直到它接近目标方向。
 
 .. _tuning-the-controllers:
 
-Tuning the Controllers
+调整控制器
 ----------------------
 
-Three PID controllers, one for each of the pitch, roll and yaw control axes, are
-used to control the vessel. Each controller takes the relevant component of the
-target angular velocity as input. The following describes how the gains for
-these controllers are automatically tuned based on the vessels available torque
-and moment of inertia.
+三个PID控制器,俯仰、偏航、翻滚控制轴一轴一个, are
+都用来控制飞船。每个控制器将目标角速度的相关分量作为输入。
+下面描述这些控制器的增益是如何根据容器可用扭矩和惯性矩自动调整的。
 
-The schematic for the entire system, in a single control axis, is as follows:
+整个系统的原理图在单个控制轴上如下:
 
 .. image:: /images/tutorials/autopilot-system.png
    :align: center
