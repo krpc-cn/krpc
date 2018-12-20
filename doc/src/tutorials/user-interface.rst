@@ -1,10 +1,10 @@
-User Interface
+用户界面
 ==============
 
-The following script demonstrates how to use the UI service to display text and
-handle basic user input. It adds a panel to the left side of the screen,
-displaying the current thrust produced by the vessel and a button to set the
-throttle to maximum.
+以下脚本演示了如何使用UI服务显示文本
+和处理基本的用户输入。它在屏幕左侧添加了一个面板，
+显示飞船当前产生的推力和一个将油门设置为最大值的按钮。
+
 
 .. tabs::
 

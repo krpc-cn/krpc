@@ -137,11 +137,11 @@
 
 * 原点在飞船的质量中心,
 
-* the y轴指向飞船轴向,
+* y轴指向飞船轴向,
 
-* the x轴指向飞船右侧,
+* x轴指向飞船右侧,
 
-* the z轴指向飞船下方,
+* z轴指向飞船下方,
 
 * 并且轴随着飞船的变化旋转。
 
@@ -260,43 +260,42 @@ kRPC提供以下参考框架:
       * :py:attr:`DockingPort.reference_frame`
       * :py:attr:`Thruster.thrust_reference_frame`
 
-相对和混合参考框架都可以用上面的构造。
+相对和混合参考框架都可以用上面的构建。
 
 自定义参考框架
 -----------------------
 
-自定义参考框架 can be constructed from the built in frames listed
-above. They come in two varieties: 'relative' and 'hybrid'.
+可以从上面列出的框架构建自定义参考框架。
+它们包含: '相对'和'混合'两种。
 
-A relative reference frame is constructed from a parent reference frame, a fixed
-position offset and a fixed rotation offset. For example, this could be used to
-construct a reference frame whose origin is 10m below the vessel as follows, by
-applying a position offset of 10 along the z-axis to
-:attr:`Vessel.reference_frame`. Relative 参考框架 can be constructed by
-calling :meth:`ReferenceFrame.create_relative`.
+一个相对参考框架构建自一个父参考框架，
+是固定位置偏移和固定旋转偏移的关系。
+例如,沿着z轴应用一个位置偏移10到
+:attr:`Vessel.reference_frame`，
+这可以构建原点在飞船下方10m的参考框架。
+相对参考框架可以通过调用
+:meth:`ReferenceFrame.create_relative`构建。
 
-A hybrid reference frame inherits its components (position, rotation, velocity
-and angular velocity) from the components of other 参考框架. Note that
-these components need not be fixed. For example, you could construct a reference
-frame whose position is the center of mass of the vessel (inherited from
-:attr:`Vessel.reference_frame`) and whose rotation is that of the planet being
-orbited (inherited from :attr:`CelestialBody.reference_frame`). Relative
-参考框架 can be constructed by calling
-:meth:`ReferenceFrame.create_hybrid`.
+混合参考框架的构成(位置,旋转,速度
+和角速度)是继承自其它参考框架的构成。注意
+这些构成不是必须固定的。例如,你可以构建这样一个参考框架：
+位置是飞船质量中心(继承自
+:attr:`Vessel.reference_frame`)，旋转是其环绕的行星
+(继承自:attr:`CelestialBody.reference_frame`)。
+混合参考框架可以通过调用
+:meth:`ReferenceFrame.create_hybrid`构建。
 
-The parent reference frame(s) of a custom reference frame can also be other
-custom 参考框架. For example, you could combine the two example frames
-from above: construct a hybrid reference frame, centered on the vessel and
-rotated with the planet being orbited, and then create a relative reference that
-offsets the position of this 10m along the z-axis. The resulting frame will have
-its origin 10m below the vessel, and will be rotated with the planet being
-orbited.
+自定义参考框架的父参考框架也可以是其它
+自定义参考框架。例如，你可以组合上面两个自定义参考框架
+:构建一个混合参考框架, 以飞船为中心且随着其环绕的行星旋转,
+然后创建一个沿着z轴偏移10m的相对参考框架。
+这样就得到一个原点在飞船下方10m并随着其环绕的行星旋转的框架。
 
-Converting Between 参考框架
+在参考框架之间转换
 -----------------------------------
 
-kRPC provides utility methods to convert 位置, 方向,旋转 and
-速度 between the different 参考框架:
+kRPC提供了在不同的参考框架之间转换位置, 方向,旋转和
+速度的实现方法:
 
 
 .. tabs::
@@ -343,17 +342,16 @@ kRPC provides utility methods to convert 位置, 方向,旋转 and
       * :py:meth:`SpaceCenter.transform_rotation`
       * :py:meth:`SpaceCenter.transform_velocity`
 
-Visual Debugging
+可视化调试
 ----------------
 
-References frames can be confusing, and choosing the correct one is a challenge
-in itself. To aid debugging, kRPCs drawing functionality can be used to
-visualize direction vectors in-game.
+参考框架可能令人困惑, 选择正确的框架本身就是一项挑战。
+为了帮助调试, kRPC的绘图函数可以用来
+在游戏中可视化方向向量。
 
-:meth:`Drawing.add_direction` will draw a direction vector, starting from the
-origin of the given reference frame. For example, the following code draws the
-direction of the current vessels velocity relative to the surface of the body it
-is orbiting:
+:meth:`Drawing.add_direction`会绘出方向向量，从指定的参考框架的原点开始。
+例如, 下面的代码绘出了
+当前飞船相对于其环绕星体表面的速度方向:
 
 .. tabs::
 
@@ -387,19 +385,18 @@ is orbiting:
       .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.py
          :language: python
 
-.. note:: The client must remain connected for the line to continue to be drawn,
-          hence the infinite loop at the end of this example.
+.. note:: 客户端必须保持连线才能持续绘图,
+          因此在示例的最后是无限循环。
 
-Examples
+示例
 --------
 
-The following examples demonstrate various uses of 参考框架.
+以下示例演示了参考框架的各种用法。
 
-Navball 方向
+导航球方向
 ^^^^^^^^^^^^^^^^^^
 
-This example demonstrates how to make the vessel point in various 方向 on
-the navball:
+这个示例演示了如何在导航球上使飞船指向各个方向:
 
 .. tabs::
 
@@ -433,30 +430,30 @@ the navball:
       .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.py
          :language: python
 
-The code uses the vessel's surface reference frame
-(:attr:`Vessel.surface_reference_frame`), pictured below:
+代码使用飞船的地面参考框架
+(:attr:`Vessel.surface_reference_frame`), 如下图所示:
 
 .. image:: /images/reference-frames/vessel-surface.png
    :align: center
 
-The first part instructs the auto-pilot to point in direction ``(0,1,0)``
-(i.e. along the y-axis) in the vessel's surface reference frame. The y-axis of
-the reference frame points in the north direction, as required.
+第一部分命令自动驾驶仪指向飞船地面参考框架的``(0,1,0)``方向
+(即沿y轴方向)。 按照规定，
+参考框架的y轴指向北方。
 
-The second part instructs the auto-pilot to point in direction ``(1,0,0)``
-(along the x-axis) in the vessel's surface reference frame. This x-axis of the
-reference frame points upwards (away from the planet) as required.
+第二部分命令自动驾驶仪指向飞船地面参考框架的``(1,0,0)``方向
+(即沿x轴方向)。按照规定，
+参考框架的x轴指向上方(从行星向外辐射)。
 
-Finally, the code instructs the auto-pilot to point in direction ``(0,0,-1)``
-(along the negative z axis). The z-axis of the reference frame points east, so
-the requested direction points west -- as required.
+最后,代码命令自动驾驶仪指向``(0,0,-1)``方向
+(即沿z轴的反向)。参考框架的z轴指向东方,
+所以按照规定，要求的方向为西方。
 
-Orbital 方向
+轨道方向
 ^^^^^^^^^^^^^^^^^^
 
-This example demonstrates how to make the vessel point in the various orbital
-方向, as seen on the navball when it is in 'orbit' mode. It uses
-:attr:`Vessel.orbital_reference_frame`.
+这个示例演示了当看到导航球上显示'轨道'模式时如何让飞船指向轨道的不同
+方向。它使用
+:attr:`Vessel.orbital_reference_frame`函数。
 
 .. tabs::
 
@@ -490,17 +487,16 @@ This example demonstrates how to make the vessel point in the various orbital
       .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.py
          :language: python
 
-This code uses the vessel's orbital reference frame, pictured below:
+该代码使用飞船的轨道参考框架，如下图所示:
 
 .. image:: /images/reference-frames/vessel-orbital.png
    :align: center
 
-Surface 'prograde'
+地面'顺行'
 ^^^^^^^^^^^^^^^^^^
 
-This example demonstrates how to point the vessel in the 'prograde' direction on
-the navball, when in 'surface' mode. This is the direction of the vessels
-velocity relative to the surface:
+此示例演示了在导航球处于'地面'模式时上如何使飞船指向'顺行'方向，
+这是飞船相对地面的速度方向:
 
 .. tabs::
 
@@ -534,28 +530,27 @@ velocity relative to the surface:
       .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.py
          :language: python
 
-This code uses the :attr:`Vessel.surface_velocity_reference_frame`, pictured
-below:
+此代码使用:attr:`Vessel.surface_velocity_reference_frame`函数,如下图所示:
 
 .. image:: /images/reference-frames/vessel-surface-velocity.png
    :align: center
 
 .. _tutorial-reference-frames-vessel-speed:
 
-Vessel Speed
+飞船速度（Speed）
 ^^^^^^^^^^^^
 
-This example demonstrates how to get the orbital and surface speeds of the
-vessel, equivalent to the values displayed by the navball.
+这个示例演示了如何获取飞船的地面和轨道速度，
+相当于导航球上显示的值。
 
-To compute the orbital speed of a vessel, you need to get the velocity relative
-to the planet's *non-rotating* reference frame
-(:attr:`CelestialBody.non_rotating_reference_frame`). This reference frame is
-fixed relative to the body, but does not rotate.
+要计算飞船的轨道速度，你需要获得相对于
+行星的*无旋转*参考框架
+(:attr:`CelestialBody.non_rotating_reference_frame`)的速度。
+这个参考框架相对于天体固定，但不旋转。
 
-For the surface speed, the planet's reference frame
-(:attr:`CelestialBody.reference_frame`) is required, as this reference frame
-rotates with the body.
+对于地面速度，行星的参考框架
+(:attr:`CelestialBody.reference_frame`)是必须的，
+因为这个参考框架随着天体旋转。
 
 .. tabs::
 
@@ -591,21 +586,20 @@ rotates with the body.
 
 .. _tutorial-reference-frames-vessel-velocity:
 
-Vessel Velocity
+飞船的速度（Velocity）
 ^^^^^^^^^^^^^^^
 
-This example demonstrates how to get the velocity of the vessel (as a vector),
-relative to the surface of the body being orbited.
+这个示例演示了如何获取飞船相对于其环绕的天体地面
+的速度(矢量),
 
-To do this, a hybrid reference frame is required. This is because we want a
-reference frame that is centered on the vessel, but whose linear velocity is
-fixed relative to the ground.
+为此需要混合参考框架。这是因为我们想要一个以飞船为中心，
+但是线速度又和地面是相对固定的参考框架。
 
-We therefore create a hybrid reference frame with its rotation set to the
-vessel's surface reference frame (:attr:`Vessel.surface_reference_frame`), and
-all other properties (including position and velocity) set to the body's
-reference frame (:attr:`CelestialBody.reference_frame`) -- which rotates with
-the body.
+因此我们需要创建一个其旋转设置为飞船
+地面参考框架(:attr:`Vessel.surface_reference_frame`), 
+其它属性(包括位置和速度)设置为
+天体参考框架(:attr:`CelestialBody.reference_frame`)的混合参考框架
+ -- 与天体一起旋转。
 
 .. tabs::
 
@@ -639,11 +633,11 @@ the body.
       .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.py
          :language: python
 
-Angle of attack
+攻角
 ^^^^^^^^^^^^^^^
 
-This example computes the angle between the direction the vessel is pointing in,
-and the direction that the vessel is moving in (relative to the surface):
+这个示例计算飞船所指方向和
+飞船移动方向(相对于地面)之间的角度:
 
 .. tabs::
 
@@ -677,18 +671,18 @@ and the direction that the vessel is moving in (relative to the surface):
       .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.py
          :language: python
 
-Note that the orientation of the reference frame used to get the direction and
-velocity vectors does not matter, as the angle between two vectors is the same
-regardless of the orientation of the axes. However, if we were to use a
-reference frame that moves with the vessel, the velocity would return
-``(0,0,0)``. We therefore need a reference frame that is not fixed relative to
-the vessel. :attr:`CelestialBody.reference_frame` fits these requirements.
+注意：用于获得位置和速度矢量的参考框架的方向不重要，
+因为无论轴的角度如何，两个矢量之间的角斗士相同的。
+但是, 
+如果我们用随飞船移动的参考框架，速度就会归``(0,0,0)``。
+因此我们需要一个不与飞船相对固定的参考框架
+:attr:`CelestialBody.reference_frame`正符合这个要求。
 
-Landing Site
+着陆地点
 ^^^^^^^^^^^^
 
-This example computes a reference frame that is located on the surface of a body
-at a given altitude, which could be used as the target for a landing auto pilot.
+这个示例计算位于指定高度的星球表面的参考框架。
+它可以作为自动着陆的目标。
 
 .. tabs::
 

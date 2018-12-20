@@ -1,11 +1,11 @@
 .. currentmodule:: SpaceCenter
 
-Interacting with Parts
+与零件交互
 ======================
 
-The following examples demonstrate use of the :ref:`python-api-parts` functionality to
-achieve various tasks. More details on specific topics can also be found in the
-API documentation:
+以下示例演示了使用:ref:`python-api-parts`功能
+来完成各种任务。有关特定主题的更多详细资料也可以在
+API文档中找到:
 
 .. tabs::
 
@@ -51,11 +51,11 @@ API documentation:
       * :ref:`python-api-parts-fuel-lines`
       * :ref:`python-api-parts-staging`
 
-Deploying all Parachutes
+展开所有降落伞
 ------------------------
 
-Sometimes things go horribly wrong. The following script does its best to save
-your Kerbals by deploying all the parachutes:
+有时事情会变得非常糟糕。以下代码通过展开所有的降落伞来
+尽可能地拯救您的Kerbals:
 
 .. tabs::
 
@@ -89,11 +89,11 @@ your Kerbals by deploying all the parachutes:
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.py
          :language: python
 
-'Control From Here' for Docking Ports
+对接口的'从此处控制'
 -------------------------------------
 
-The following example will find a standard sized Clamp-O-Tron docking port, and
-control the vessel from it:
+以下代码会寻找一个标准尺寸的Clamp-O-Tron对接口,
+然后从它这控制飞船:
 
 .. tabs::
 
@@ -127,11 +127,11 @@ control the vessel from it:
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.py
          :language: python
 
-Combined Specific Impulse
+综合比冲量
 -------------------------
 
-The following script calculates the combined specific impulse of all currently
-active and fueled engines on a rocket. See here for a description of the maths:
+以下脚本计算当前火箭上激活并且正在燃烧的引擎的综合比冲量。
+这里是计算方法的详细信息:
 https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
 
 .. tabs::

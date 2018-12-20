@@ -1,41 +1,44 @@
 import time
 import krpc
 
-conn = krpc.connect(name='User Interface Example')
+conn = krpc.connect(name='用户界面演示')
 canvas = conn.ui.stock_canvas
 
-# Get the size of the game window in pixels
+# 获取游戏窗口的像素尺寸
 screen_size = canvas.rect_transform.size
 
-# Add a panel to contain the UI elements
+# 添加一个面板用来容纳UI元素
 panel = canvas.add_panel()
 
-# Position the panel on the left of the screen
+# 将面板定位在屏幕左侧
 rect = panel.rect_transform
 rect.size = (200, 100)
 rect.position = (110-(screen_size[0]/2), 0)
 
-# Add a button to set the throttle to maximum
-button = panel.add_button("Full Throttle")
+# 添加按钮把节流阀设置为最大
+button = panel.add_button("反向节流阀")
 button.rect_transform.position = (0, 20)
 
-# Add some text displaying the total engine thrust
-text = panel.add_text("Thrust: 0 kN")
+# 添加一些显示总发动机推力的文本
+text = panel.add_text("推力: 0 kN")
 text.rect_transform.position = (0, -20)
 text.color = (1, 1, 1)
 text.size = 18
 
-# Set up a stream to monitor the throttle button
+# 设置流以监视节流阀按钮
 button_clicked = conn.add_stream(getattr, button, 'clicked')
 
 vessel = conn.space_center.active_vessel
 while True:
-    # Handle the throttle button being clicked
+    # 处理被点击的节流阀按钮
     if button_clicked():
-        vessel.control.throttle = 1
+        if (vessel.control.throttle == 0) :
+            vessel.control.throttle = 1
+        else:
+            vessel.control.throttle = 0
         button.clicked = False
 
-    # Update the thrust text
-    text.content = 'Thrust: %d kN' % (vessel.thrust/1000)
+    # 更新推力文本
+    text.content = '推力: %.1f kN' % (vessel.thrust/1000)
 
     time.sleep(0.1)

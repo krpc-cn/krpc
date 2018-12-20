@@ -1,10 +1,10 @@
 .. currentmodule:: SpaceCenter
 
-Pitch, Heading and Roll
+俯仰,偏航和滚动
 =======================
 
-This example calculates the pitch, heading and rolls angles of the active vessel
-once per second.
+此示例每秒计算一次当前飞船的俯仰角，偏航角和滚动角。
+
 
 .. tabs::
 

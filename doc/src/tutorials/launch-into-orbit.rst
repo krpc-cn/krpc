@@ -1,13 +1,13 @@
 .. currentmodule:: SpaceCenter
 
-Launch into Orbit
+发射入轨
 =================
 
-This tutorial launches a two-stage rocket into a 150km circular orbit. The
-program assumes you are using :download:`this craft file
-</crafts/LaunchIntoOrbit.craft>`.
+本教程发射一个二级火箭到150km的圆形轨道。
+该程序假设您正在使用:download:`这个火箭模型
+</crafts/LaunchIntoOrbit.craft>`。
 
-The program is available in a variety of languages:
+该程序有多种语言版本:
 
 :download:`C#</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs>`,
 :download:`C++</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp>`,
@@ -15,8 +15,8 @@ The program is available in a variety of languages:
 :download:`Lua</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua>`,
 :download:`Python</scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py>`
 
-The following code connects to the server, gets the active vessel, sets up a
-bunch of streams to get flight telemetry then prepares the rocket for launch.
+下面的代码连接到服务端,获取当前飞船,
+设置一组信息流获取飞行遥测数据以准备火箭发射。
 
 .. tabs::
 
@@ -55,11 +55,11 @@ bunch of streams to get flight telemetry then prepares the rocket for launch.
          :lines: 1-31
          :linenos:
 
-The next part of the program launches the rocket. The main loop continuously
-updates the auto-pilot heading to gradually pitch the rocket towards the
-horizon. It also monitors the amount of solid fuel remaining in the boosters,
-separating them when they run dry. The loop exits when the rockets apoapsis is
-close to the target apoapsis.
+程序的下一部分是发射火箭。 主循环连续不断地
+更新自动驾驶仪将火箭逐渐朝向地平线。
+它还监测助推器中剩余固体燃料的数量，
+在助推器耗尽时将其分离。
+当火箭的远拱点接近目标远拱点时，循环退出。
 
 .. tabs::
 
@@ -103,8 +103,8 @@ close to the target apoapsis.
          :lineno-start: 33
          :linenos:
 
-Next, the program fine tunes the apoapsis, using 10% thrust, then waits until
-the rocket has left Kerbin's atmosphere.
+接下来，该程序用10%的推力对远拱点进行微调，
+然后等待火箭离Kerbin的大气层。
 
 .. tabs::
 
@@ -148,11 +148,11 @@ the rocket has left Kerbin's atmosphere.
          :lineno-start: 64
          :linenos:
 
-It is now time to plan the circularization burn. First, we calculate the delta-v
-required to circularize the orbit using the `vis-viva equation
-<https://en.wikipedia.org/wiki/Vis-viva_equation>`_. We then calculate the burn
-time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
-<https://en.wikipedia.org/wiki/Tsiolkovsky_rocket_equation>`_.
+现在是计划环化轨道燃烧的时候了。
+首先,我们用`vis-viva方程
+<https://en.wikipedia.org/wiki/Vis-viva_equation>`_计算环化轨道所需的delta-v。
+再用`Tsiolkovsky火箭方程
+<https://en.wikipedia.org/wiki/Tsiolkovsky_rocket_equation>`_计算达到此delta-v所需的燃烧时间。
 
 .. tabs::
 
@@ -196,9 +196,9 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
          :lineno-start: 76
          :linenos:
 
-Next, we need to rotate the craft and wait until the circularization burn. We
-orientate the ship along the y-axis of the maneuver node's reference frame
-(i.e. in the direction of the burn) then time warp to 5 seconds before the burn.
+接下来,我们需要旋转太空船等待环化燃烧。 We
+ship沿着机动节点参考框架
+的y轴(就是燃烧方向)，然后时间加速到燃烧前5秒。
 
 .. tabs::
 
@@ -242,10 +242,10 @@ orientate the ship along the y-axis of the maneuver node's reference frame
          :lineno-start: 96
          :linenos:
 
-This next part executes the burn. It sets maximum throttle, then throttles down
-to 5% approximately a tenth of a second before the predicted end of the burn. It then
-monitors the remaining delta-v until it flips around to point retrograde (at
-which point the node has been executed).
+下一步是执行燃烧。设置最大油门， then throttles down
+然后在预测燃烧结束前的1/10秒把油门降至5%。 It then
+监视剩余的delta-v直到它翻转到节点的反方向
+(已经执行完的节点).
 
 .. tabs::
 
@@ -289,4 +289,4 @@ which point the node has been executed).
          :lineno-start: 108
          :linenos:
 
-The rocket should now be in a circular 150km orbit above Kerbin.
+现在火箭应该在Kerbin的150km圆形轨道上了吧。

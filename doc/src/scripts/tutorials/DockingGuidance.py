@@ -3,7 +3,7 @@ import time
 import numpy as np
 import numpy.linalg as la
 import krpc
-
+#此处需要安装wheel 然后下载curses到python的scripts文件夹再pip install curses文件名，numpy也要安装。本脚本只能在终端执行，不能调试，因为curses不支持
 # Set up curses
 stdscr = curses.initscr()
 curses.nocbreak()

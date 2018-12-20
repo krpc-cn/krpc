@@ -1,7 +1,7 @@
 import math
 import time
 import krpc
-conn = krpc.connect(name='Pitch/Heading/Roll')
+conn = krpc.connect(name='俯仰/偏航/滚动')
 vessel = conn.space_center.active_vessel
 
 
@@ -20,7 +20,7 @@ def magnitude(v):
 
 
 def angle_between_vectors(u, v):
-    """ Compute the angle between vector u and v """
+    """ 计算矢量u和v之间的夹角 """
     dp = dot_product(u, v)
     if dp == 0:
         return 0
@@ -33,35 +33,35 @@ while True:
 
     vessel_direction = vessel.direction(vessel.surface_reference_frame)
 
-    # Get the direction of the vessel in the horizon plane
+    # 获取飞船在水平面上的方向
     horizon_direction = (0, vessel_direction[1], vessel_direction[2])
 
-    # Compute the pitch - the angle between the vessels direction and
-    # the direction in the horizon plane
+    # 计算俯仰角
+    # - 飞船朝向与水平面之间的夹角
     pitch = angle_between_vectors(vessel_direction, horizon_direction)
     if vessel_direction[0] < 0:
         pitch = -pitch
 
-    # Compute the heading - the angle between north and
-    # the direction in the horizon plane
+    # 计算偏航角
+    # - 在水平面上飞船和北方之间的夹角
     north = (0, 1, 0)
     heading = angle_between_vectors(north, horizon_direction)
     if horizon_direction[2] < 0:
         heading = 360 - heading
 
-    # Compute the roll
-    # Compute the plane running through the vessels direction
-    # and the upwards direction
+    # 计算滚动角
+    # 计算飞船朝向和向上方向之间的平面
+    # 
     up = (1, 0, 0)
     plane_normal = cross_product(vessel_direction, up)
-    # Compute the upwards direction of the vessel
+    # 计算飞船的向上方向
     vessel_up = conn.space_center.transform_direction(
         (0, 0, -1), vessel.reference_frame, vessel.surface_reference_frame)
-    # Compute the angle between the upwards direction of
-    # the vessel and the plane normal
+    # 计算飞船向上方向和标准面之间的夹角
+    # 
     roll = angle_between_vectors(vessel_up, plane_normal)
-    # Adjust so that the angle is between -180 and 180 and
-    # rolling right is +ve and left is -ve
+    # 调整其为-180到180之间的数值，
+    # 右滚是+ve左滚是-ve。
     if vessel_up[0] > 0:
         roll *= -1
     elif roll < 0:

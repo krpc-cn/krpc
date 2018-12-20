@@ -6,7 +6,7 @@ turn_start_altitude = 250
 turn_end_altitude = 45000
 target_altitude = 150000
 
-conn = krpc.connect(name='Launch into orbit')
+conn = krpc.connect(name='发射入轨')
 vessel = conn.space_center.active_vessel
 
 # Set up streams for telemetry
