@@ -69,7 +69,7 @@ while True:
     else:
         roll -= 180
 
-    print('pitch = % 5.1f, heading = % 5.1f, roll = % 5.1f' %
+    print('俯仰 = % 5.1f, 偏航 = % 5.1f, 滚动 = % 5.1f' %
           (pitch, heading, roll))
 
     time.sleep(1)
