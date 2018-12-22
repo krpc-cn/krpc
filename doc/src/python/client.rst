@@ -195,12 +195,12 @@ kRPC提供了两种有效执行此操作的机制: *条件变量*
    通过该对象可以与服务器进行通信。
 
    :param str name: 连接的描述性名称。这将传递到服务器并显示在游戏内服务器窗口中。
-   :param str address: 要连接的服务器的地址。 Can either be a hostname or an IP
-                       address in dotted decimal notation. Defaults to '127.0.0.1'.
-   :param int rpc_port: RPC服务器的端口号。 Defaults to 50000. This should match the
-                           RPC port number of the server you want to connect to.
-   :param int stream_port: 流服务器的端口号。 Defaults to 50001. This should
-                           match the stream port number of the server you want to connect to.
+   :param str address: 要连接的服务器的地址。 可以写主机名(hostname)或者
+                       十进制的IP地址。默认是'127.0.0.1'。
+   :param int rpc_port: RPC服务器的端口号。默认50000。这里应该与你要连接服务器的
+                           RPC端口一样。
+   :param int stream_port: 流服务器的端口号。默认50001。这里应该与你要连接服务器的
+                           数据流端口一样。
 
 .. class:: krpc.client.Client
 
@@ -210,174 +210,163 @@ kRPC提供了两种有效执行此操作的机制: *条件变量*
 
    .. method:: add_stream(func, *args, **kwargs)
 
-      Create a stream for the function *func* called with arguments *args* and *kwargs*. Returns a
-      :class:`krpc.stream.Stream` object.
+      调用参数*args*和*kwargs*为函数*func*创建数据流。
+      返回一个:class:`krpc.stream.Stream`对象。
 
    .. method:: stream(func, *args, **kwargs)
 
-      Allows use of the ``with`` statement to create a stream and automatically remove it from the
-      server when it goes out of scope. The function to be streamed should be passed as *func*, and
-      its arguments as *args* and *kwargs*.
+      允许使用``with``语句创建数据流并在它超出范围时从服务器删除。
+      此函数应以*func*传递创建数据流,
+      以*args*和*kwargs*作为参数。
 
    .. attribute:: stream_update_condition
 
-      A condition variable (of type ``threading.Condition``) that is notified whenever a stream
-      update finishes processing.
+      每当流更新完成处理则通知条件变量(类型``threading.Condition``)。
 
    .. method:: wait_for_stream_update(timeout=None)
 
-      This method blocks until a stream update finishes processing or the operation times out.
+      此方法将阻塞，直到流更新完成处理或操作超时.
 
-      The stream update condition variable must be locked before calling this method.
+      在调用此方法之前，必须锁定流更新条件变量。
 
-      If *timeout* is specified and is not ``None``, it should be a floating point number specifying
-      the timeout in seconds for the operation.
+      如果*timeout*已指定并不为``None``,它应该是一个浮点数
+      指定操作的超时时间。
 
    .. method:: add_stream_update_callback(callback)
 
-      Adds a callback function that is invoked whenever a stream update finishes processing.
+      添加一个回调函数，每当流更新完成处理就调用。
 
       .. note::
 
-         The callback function may be called from a different thread to that which created the
-         stream. Any changes to shared state must therefore be protected with appropriate
-         synchronization.
+         回调函数可以被创建的流的不同线程调用。
+         因此，必须用占用同步保护共享状态的任何更改。
 
    .. method:: remove_callback(callback)
 
-      Removes a stream update callback function.
+      删除一个回调函数的流更新。
 
    .. method:: get_call(func, *args, **kwargs)
 
-      Converts a call to function *func* with arguments *args* and *kwargs* into a message
-      object. This allows descriptions of procedure calls to be passed to the server, for example
-      when constructing custom events. See :ref:`python-client-events`.
+      转换带有参数*args*和*kwargs*的函数*func*调用为消息对象。
+      这允许把过程调用的描述传递给服务器,例如
+      在构建自定义事件时。参考:ref:`python-client-events`.
 
    .. method:: close()
 
-      Closes the connection to the server.
+      关闭与服务器的连接。
 
    .. attribute:: krpc
 
-      The basic KRPC service, providing interaction with basic functionality of the server.
+      基本KRPC服务,提供与服务器的基本交互功能。
 
       :rtype: :class:`krpc.client.KRPC`
 
 .. class:: krpc.client.KRPC
 
-      This class provides access to the basic server functionality provided by the :class:`KRPC`
-      service. An instance can be obtained by calling :attr:`krpc.client.Client.krpc`.
+      此类提供对访问:class:`KRPC`服务器基本服务功能的支持
+      调用:attr:`krpc.client.Client.krpc`获取实例。
 
-      See :class:`KRPC` for full documentation of this class.
+      参阅:class:`KRPC`查看此类完整文档。
 
-      Some of this functionality is used internally by the python client (for example to create and
-      remove streams) and therefore does not need to be used directly from application code.
+      其中一些功能由Python客户端内部使用(如创建和删除流)
+      因此不用再在代码中使用。
 
 .. class:: krpc.stream.Stream
 
-   This class represents a stream. See :ref:`python-client-streams`.
+   此类代表数据流，参阅:ref:`python-client-streams`。
 
    .. method:: start(wait=True)
 
-      Starts the stream. When a stream is created by calling :meth:`krpc.client.Client.add_stream`
-      it does not start sending updates to the client until this method is called.
+      开始流传输。当通过调用:meth:`krpc.client.Client.add_stream`创建流，
+      在调用此方法之前不会向客户端更新信息。
 
-      If wait is true, this method will block until at least one update has been received from the
-      server.
+      如果wait为true,此方法从服务器返回至少一个更新前会一直阻塞程序。
 
-      If wait is false, the method starts the stream and returns immediately. Subsequent calls to
-      :meth:`__call__` may raise a ``StreamError`` exception if the stream does not yet contain a
-      value.
+      如果wait为false,此方法会启动流并立即返回。 如果流尚未包含值则后续调用
+      :meth:`__call__`可能会引发一个``StreamError``异常。
 
    .. attribute:: rate
 
-      The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
+      流更新的频率-赫兹(Hertz)。设为零时不受限制。
 
    .. method:: __call__()
 
-      Returns the most recent value for the stream. If executing the remote procedure for the stream
-      throws an exception, calling this method will rethrow the exception. Raises a ``StreamError``
-      exception if no update has been received from the server.
+      返回流的最新值，如果执行流的远程过程时抛出异常，
+      ,调用此方法可以重新抛出异常。
+      如果服务器没有返回任何更新，则引发``StreamError``异常。
 
-      If the stream has not been started this method calls ``start(True)`` to start the stream and
-      wait until at least one update has been received.
+      如果流还没启动，此方法调用``start(True)``启动流
+      并一直等到服务器返回第一个更新。
 
    .. attribute:: condition
 
-      A condition variable (of type ``threading.Condition``) that is notified whenever the value of
-      the stream changes.
+      每当流的值发生变化通知条件变量(类型``threading.Condition``)。
 
    .. method:: wait(timeout=None)
 
-      This method blocks until the value of the stream changes or the operation times out.
+      此方法在流的值发生变化或设置的超时时间超时之前会一直阻塞程序。
 
-      The streams condition variable must be locked before calling this method.
+      调用此方法前必须锁定数据流的条件变量。
 
-      If *timeout* is specified and is not ``None``, it should be a floating point number specifying
-      the timeout in seconds for the operation.
+      如果*timeout*指定并且不为``None``,必须用浮点数指定超时秒数。
 
-      If the stream has not been started this method calls ``start(False)`` to start the stream
-      (without waiting for at least one update to be received).
+      如果流还没启动，此方法调用``start(False)``启动流
+      (不用等着返回至少一个更新)。
 
    .. method:: add_callback(callback)
 
-      Adds a callback function that is invoked whenever the value of the stream changes. The
-      callback function should take one argument, which is passed the new value of the stream.
+      添加一个回调函数，只要流的值发生变化就调用该函数。 The
+      回调函数必须有一个参数，用于传递流的新值。
 
       .. note::
 
-         The callback function may be called from a different thread to that which created the
-         stream. Any changes to shared state must therefore be protected with appropriate
-         synchronization.
+         回调函数可以被创建流的不同线程调用。
+         stream. 因此必须占用同步保护共享状态的任何变化。
 
    .. method:: remove_callback(callback)
 
-      Removes a callback function from the stream.
+      从流中删除回调函数。
 
    .. method:: remove()
 
-      Removes the stream from the server.
+      从服务器中删除流。
 
 .. class:: krpc.event.Event
 
-   This class represents an event. See :ref:`python-client-events`. It is wrapper around a stream of
-   type ``bool`` that indicates when the event occurs.
+   此类代表一个事件。参阅:ref:`python-client-events`。
+   它包装一个类型``bool``的流来指示事件发生。
 
    .. method:: start()
 
-      Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called.
+      启动事件。创建事件时,在调用此方法前不会从服务器收到流更新。
 
    .. attribute:: condition
 
-      The condition variable (of type ``threading.Condition``) that is notified whenever the event
-      occurs.
+      事件发生时通知的条件变量(类型``threading.Condition``)。
 
    .. method:: wait(timeout=None)
 
-      This method blocks until the event occurs or the operation times out.
+      此方法在事件发生或超时前阻塞程序。
 
-      The events condition variable must be locked before calling this method.
+      调用此方法前必须锁定事件的条件变量。
 
-      If *timeout* is specified and is not ``None``, it should be a floating point number specifying
-      the timeout in seconds for the operation.
+      如果*timeout*指定并且不为``None``,则必须用浮点数指定超时秒数。
 
-      If the event has not been started this method calls ``start()`` to start the underlying
-      stream.
+      如果事件还未启动，此方法调用``start()``来启动基础流。
 
    .. method:: add_callback(callback)
 
-      Adds a callback function that is invoked whenever the event occurs. The callback function
-      should be a function that takes zero arguments.
+      添加一个事件发生时调用的回调函数。
+      回调函数必须是一个没有参数的函数。
 
    .. method:: remove_callback(callback)
 
-      Removes a callback function from the event.
+      从事件删除回调函数。
 
    .. method:: remove()
 
-      Removes the event from the server.
+      从服务器删除事件。
 
    .. attribute:: stream
 
-      Returns the underlying stream for the event.
+      返回事件的基础流。
